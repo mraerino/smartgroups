@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" >
-  <head>
-    <title>Angular Material - Starter App</title>
+<html lang="en">
+<head>
+    <title>Smartgroups board</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css"/>
     <link rel="stylesheet" href="assets/app.css"/>
 
@@ -17,87 +18,73 @@
          * Hide when Angular is not yet loaded and initialized
          */
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-          display: none !important;
+            display: none !important;
         }
     </style>
+</head>
 
-  </head>
+<body ng-app="starterApp" layout="row" ng-controller="BoardController as bc" ng-cloak>
 
-  <body ng-app="starterApp" layout="row" ng-controller="UserController as ul" ng-cloak >
-
-  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
-                md-component-id="left"
-                md-is-locked-open="$mdMedia('gt-sm')">
-
-    <md-toolbar class="md-whiteframe-z1">
-      <h1>Users</h1>
-    </md-toolbar>
-
-    <md-list>
-      <md-list-item ng-repeat="it in ul.users">
-          <md-button ng-click="ul.selectUser(it)" ng-class="{'selected' : it === ul.selected }">
-            <md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>
-            {{it.name}}
-          </md-button>
-      </md-list-item>
-    </md-list>
-
-  </md-sidenav>
-
-
-  <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
-
-    <md-toolbar layout="row" class="md-whiteframe-z1">
-      <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
-        <md-icon md-svg-icon="menu" ></md-icon>
-      </md-button>
-      <h1>Angular Material - Starter App</h1>
-    </md-toolbar>
-
-    <md-content flex id="content">
-        <md-icon md-svg-icon="{{ul.selected.avatar}}" class="avatar"></md-icon>
-        <h2>{{ul.selected.name}}</h2>
-        <p>{{ul.selected.content}}</p>
-
-        <md-button class="contact" md-no-ink ng-click="ul.showContactOptions($event)" aria-label="Contact User">
-          <md-tooltip>Contact {{ ul.selected.name }}</md-tooltip>
-          <md-icon md-svg-icon="share"></md-icon>
-        </md-button>
-      </md-content>
-
-  </div>
+    <div class="main-container">
+        <md-toolbar class="md-whiteframe-4dp">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>Smartgroups Board title</span>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="More">
+                    <md-icon>more_vert</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <div layout="row">
+            <div flex-gt-sm="70">
+                <md-card ng-repeat="post in bc.board.posts">
+                    <md-card-header>
+                        <md-card-avatar>
+                            <img class="md-user-avatar" src="https://material.angularjs.org/latest/img/100-2.jpeg">
+                        </md-card-avatar>
+                        <md-card-header-text>
+                            <span class="md-title">{{ post.created_by.name }}</span>
+                            <span class="md-subhead">{{ post.created_at }}</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-card-content>
+                        <p>{{ post.content }}</p>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="start center">
+                        <md-button ng-click="actionLike(post)">
+                            <md-icon>thumb_up</md-icon>
+                            Like
+                        </md-button>
+                        <md-button ng-click="actionComment(post)">
+                            <md-icon>question_answer</md-icon>
+                            Comment
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+            <div flex-gt-sm="30">
+                <md-card>
+                    <md-card-content>
+                        <p>
+                            Hier kommen noch allgemeine Infos zum Board hin.
+                        </p>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
 
     <script src="./bower_components/angular/angular.js"></script>
     <script src="./bower_components/angular-animate/angular-animate.js"></script>
     <script src="./bower_components/angular-aria/angular-aria.js"></script>
     <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
 
-    <script src="./src/users/Users.js"></script>
-    <script src="./src/users/UserController.js"></script>
-    <script src="./src/users/UserService.js"></script>
+    <script src="./src/users/Board.js"></script>
+    <script src="./src/users/BoardController.js"></script>
+    <script src="./src/users/BoardService.js"></script>
+    <script src="./src/app.js"></script>
 
-    <script type="text/javascript">
-
-          angular
-              .module('starterApp', ['ngMaterial', 'users'])
-              .config(function($mdThemingProvider, $mdIconProvider){
-
-                  $mdIconProvider
-                      .defaultIconSet("./assets/svg/avatars.svg", 128)
-                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
-                      .icon("share"      , "./assets/svg/share.svg"       , 24)
-                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
-                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
-                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
-                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
-
-                      $mdThemingProvider.theme('default')
-                          .primaryPalette('brown')
-                          .accentPalette('red');
-
-              });
-
-    </script>
-
-  </body>
+</body>
 </html>
